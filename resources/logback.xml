@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Az alapbeállításokat betöltjük a Spring Boot defaults.xml fájlból. -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Log fájl neve és helye. -->
+    <property name="LOG_FILE" value="src/logs/lotr-webshop.log" />
+
+    <!-- A FILE-ROLLING nevű naplózó appender beállításai. -->
+    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- A log fájl elérési útja a LOG_FILE property-ből. -->
+        <file>${LOG_FILE}</file>
+
+        <!-- Idő alapú naplózás beállításai. -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Naplófájl neve a dátum alapján. -->
+            <fileNamePattern>logs/archived/lotr-webshop-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- Idő és méret alapú naplófájl konfiguráció. -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- Maximális fájlméret: 1GB. -->
+                <maxFileSize>1GB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- Maximális naplótörténet (archivált fájlok száma). -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <!-- Log üzenet formázása. -->
+        <encoder>
+            <!-- Dátum, log szint, logger kategória, szál, log üzenet és új sor karakter. -->
+            <pattern>%d %p %c{1} [%t] %m%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>smtp.gmail.com</smtpHost> <!-- Az SMTP kiszolgáló neve (Gmail esetén) -->
+        <smtpPort>587</smtpPort> <!-- Az SMTP kiszolgáló portja (587 a Gmail esetén) -->
+        <STARTTLS>true</STARTTLS> <!-- Engedélyezze a STARTTLS-t a biztonságos kapcsolat érdekében -->
+        <username>middle3arthmarket@gmail.com</username> <!-- Az email fiók felhasználóneve -->
+        <password>zrrv iyls gvaq adje</password><!-- Az e-mail fiók alkalmazás jelszava -->
+        <to>middle3arthmarket@gmail.com</to> <!-- Az e-mail-cím, ahova a logokat küldi -->
+        <from>middle3arthmarket@gmail.com</from> <!-- Az e-mail-cím, ahonnan a logokat küldi -->
+        <subject>ERROR: %logger{20} - %msg</subject> <!-- Az email tárgya (log szint és log üzenet) -->
+        <layout class="ch.qos.logback.classic.html.HTMLLayout"/> <!-- Az e-mail tartalmának formátuma -->
+    </appender>
+
+
+    <!-- A CONSOLE nevű naplózó appender beállításai. -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                <!-- Dátum, szál, log szint, logger kategória, log üzenet és új sor karakter. -->
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="hu.progmasters" level="error">
+        <appender-ref ref="EMAIL"/>
+    </logger>
+
+    <!-- A 'hu.progmasters' kategóriára vonatkozó naplózó beállítások TRACE szinten. -->
+    <logger name="hu.progmasters" level="trace" additivity="false">
+        <appender-ref ref="FILE-ROLLING"/>
+    </logger>
+
+    <!-- A gyökér (root) kategóriára vonatkozó naplózó beállítások ERROR szinten a FILE-ROLLING appenderrel. -->
+    <root name = "hu.progmasters" level="error">
+        <appender-ref ref="FILE-ROLLING"/>
+    </root>
+
+    <!-- A 'hu.progmasters' kategóriára vonatkozó naplózó beállítások DEBUG szinten a CONSOLE appenderrel. -->
+    <logger name="hu.progmasters" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- A gyökér (root) kategóriára vonatkozó naplózó beállítások ERROR szinten a CONSOLE appenderrel. -->
+    <root level="error">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="EMAIL"/>
+    </root>
+
+</configuration>
+
+

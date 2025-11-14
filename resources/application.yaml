@@ -1,0 +1,58 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/webshop?createDatabaseIfNotExist=true&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: test1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: middle3arthmarket@gmail.com
+    password: zrrv iyls gvaq adje
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  devtools:
+    livereload:
+      enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 40MB
+      max-request-size: 40MB
+
+logging:
+  level:
+    com.progmasters: debug
+    org.springframework.web: info
+    org.hibernate: error
+    security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+paypal:
+  client-id: AU8FQmKZDnSleHaYkVO7nftwkY6y9E4ee8IamTRYRocIQSPYEo5iqH0A4wQwIpoHwYFteTFgJO4lR7LV
+  client-secret: ELYpaok92wPWK0WUqj7JAdpxXiCGIQPpz59JZrx0SMRho3Ux9wvIMGm5pdpUl9SU6fj-NRk6mmE-rct0
+  mode: sandbox # Use #sandbox' for testing and 'live' for Production

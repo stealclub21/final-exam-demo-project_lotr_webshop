@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Really?</title>
+    <style>
+        img {
+            width: 60%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center; margin-top: 50px;">
+    <img src="/images/really.png" alt="REALLY????">
+    <p id="text" style="font-size: 20px; font-weight: bold;">REALLY??? Is it that difficult?</p>
+</div>
+<script>
+    setTimeout(function() {
+        var referrer = document.referrer;
+        var redirectUrl = "/lotr-webshop/registration/custom-login";
+
+        function getQueryParamFromUrl(url, paramName) {
+            var query = url.split('?')[1];
+            var params = query ? query.split('&') : [];
+            for (var i = 0; i < params.length; i++) {
+                var pair = params[i].split('=');
+                if (decodeURIComponent(pair[0]) === paramName) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return null;
+        }
+
+        if (referrer.includes("/lotr-webshop/registration/reset-password")) {
+            var email = getQueryParamFromUrl(referrer, "email");
+            if (email) {
+                redirectUrl = "/lotr-webshop/registration/reset-password?email=" + email;
+            }
+        } else if (referrer.includes("/login")) {
+            redirectUrl = "/lotr-webshop/registration/custom-login";
+        }
+
+        window.location.href = redirectUrl;
+    }, 4000);
+</script>
+</body>
+</html>
